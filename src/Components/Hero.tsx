@@ -64,11 +64,11 @@ const Hero = () => {
                 <br />
                 rebuilt by{" "}
                 <a
-                    href="https://www.frontend.fyi"
+                    href="https://orelyofolio.netlify.app"
                     target="_blank"
                     rel="noopener nofollow noreferrer"
                 >
-                    Frontend.FYI
+                    Orel Chalfon 
                 </a>
             </p>
 

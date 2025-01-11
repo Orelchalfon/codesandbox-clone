@@ -195,8 +195,8 @@ export const Branches = () => {
               className="mt-3 block text-2xl text-white"
               style={{ opacity: newBranchOpacity }}
             >
-              <FaCodeBranch className="mr-3 inline-block h-12 w-12" /> Frontend
-              FYI's branch
+              <FaCodeBranch className="mr-3 inline-block h-12 w-12" /> Orel
+              Chalfon's branch
             </motion.span>
           </motion.div>
 
