@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCodeBranch } from "react-icons/fa";
-import { stylesWithCssVar } from '../Utils/motion';
+import { stylesWithCssVar } from "../Utils/motion";
 
 const animationOrder = {
   initial: 0,
@@ -21,8 +21,19 @@ const animationOrder = {
   endTextFadeInEnd: 1,
 };
 
-export const Branches = () => {
+const Branches = () => {
   const targetRef = useRef<HTMLDivElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start end", "end end"],
@@ -38,6 +49,7 @@ export const Branches = () => {
     ],
     [0, 1, 1, 0]
   );
+
   const scale = useTransform(
     scrollYProgress,
     [
@@ -46,8 +58,9 @@ export const Branches = () => {
       animationOrder.showLoadingScreenEnd,
       animationOrder.createBranchStart,
     ],
-    [3, 1, 1, 0.5]
+    isMobile ? [2, 1, 1, 0.7] : [3, 1, 1, 0.5]
   );
+
   const x = useTransform(
     scrollYProgress,
     [
@@ -61,7 +74,9 @@ export const Branches = () => {
       animationOrder.showLoadingScreenEnd,
       animationOrder.createBranchEnd,
     ],
-    ["50%", "50%", "55%", "-50%", "-50%", "-55%", "0%", "0%", "-27%"]
+    isMobile
+      ? ["50%", "50%", "52%", "-30%", "-30%", "-32%", "0%", "0%", "-15%"]
+      : ["50%", "50%", "55%", "-50%", "-50%", "-55%", "0%", "0%", "-27%"]
   );
 
   const loadingScreenOpacity = useTransform(
@@ -72,15 +87,17 @@ export const Branches = () => {
     ],
     [0, 1]
   );
+
   const loadingScreenX = useTransform(
     scrollYProgress,
     [animationOrder.createBranchStart, animationOrder.createBranchEnd],
-    ["0%", "27%"]
+    isMobile ? ["0%", "15%"] : ["0%", "27%"]
   );
+
   const loadingScreenscale = useTransform(
     scrollYProgress,
     [animationOrder.createBranchStart, animationOrder.createBranchEnd],
-    [1, 0.5]
+    isMobile ? [1, 0.7] : [1, 0.5]
   );
 
   const paragraph1Opacity = useTransform(
@@ -92,6 +109,7 @@ export const Branches = () => {
     ],
     [0, 1, 0]
   );
+
   const paragraph1TranslateY = useTransform(
     scrollYProgress,
     [
@@ -111,6 +129,7 @@ export const Branches = () => {
     ],
     [0, 1, 0]
   );
+
   const paragraph2TranslateY = useTransform(
     scrollYProgress,
     [
@@ -152,62 +171,75 @@ export const Branches = () => {
 
   return (
     <section ref={targetRef}>
-      <div className="relative h-[800vh]">
-        <div className="sticky top-1/2 flex origin-center -translate-y-1/2 justify-center">
+      <div className='relative h-[600vh] md:h-[800vh]'>
+        <div className='sticky top-1/2 flex origin-center -translate-y-1/2 justify-center'>
           <motion.div
-            className="translate-x-centered-offset absolute left-1/2 top-1/2 flex w-[50vw] -translate-y-1/2 scale-[var(--scale)] flex-col items-center justify-center "
+            className='translate-x-centered-offset absolute left-1/2 top-1/2 flex w-[80vw] md:w-[50vw] -translate-y-1/2 scale-[var(--scale)] flex-col items-center justify-center'
             style={stylesWithCssVar({
               opacity,
               "--x": x,
               "--scale": scale,
             })}
           >
-            <img src="/main-screen.svg" className="h-auto w-full" />
+            <img
+              src='/main-screen.svg'
+              className='h-auto w-full'
+              alt='Main screen'
+            />
             <motion.img
               style={{ opacity: avatarOpacity }}
-              className="absolute left-[13%] top-1/2 h-[1.5vw] w-[1.5vw] translate-y-1/2 rounded-full border border-[#c82] object-cover will-change-transform"
-              src="https://unsplash.com/photos/sibVwORYqs0/download?force=true&w=128&h=128"
+              className='absolute left-[13%] top-1/2 h-[2.5vw] w-[2.5vw] md:h-[1.5vw] md:w-[1.5vw] translate-y-1/2 rounded-full border border-[#c82] object-cover will-change-transform'
+              src='https://unsplash.com/photos/sibVwORYqs0/download?force=true&w=128&h=128'
+              alt='User avatar'
             />
             <motion.span
-              className="mt-3 block text-2xl text-white"
+              className='mt-3 block text-lg md:text-2xl text-white'
               style={{ opacity: newBranchOpacity }}
             >
-              <FaCodeBranch className="mr-3 inline-block h-12 w-12" /> Feature
-              branch
+              <FaCodeBranch className='mr-2 md:mr-3 inline-block h-8 w-8 md:h-12 md:w-12' />{" "}
+              Feature branch
             </motion.span>
           </motion.div>
           <motion.div
-            className="translate-x-centered-offset absolute left-1/2 top-1/2 flex w-[50vw] -translate-y-1/2 scale-[var(--scale)] flex-col items-center justify-center"
+            className='translate-x-centered-offset absolute left-1/2 top-1/2 flex w-[80vw] md:w-[50vw] -translate-y-1/2 scale-[var(--scale)] flex-col items-center justify-center'
             style={stylesWithCssVar({
               opacity: loadingScreenOpacity,
               "--x": loadingScreenX,
               "--scale": loadingScreenscale,
             })}
           >
-            <img src="/loading-screen.svg" className="h-auto w-full" />
+            <img
+              src='/loading-screen.svg'
+              className='h-auto w-full'
+              alt='Loading screen'
+            />
             <motion.div
               style={{ opacity: newBranchOpacity }}
-              className="absolute inset-0"
+              className='absolute inset-0'
             >
-              <img src="/main-screen.svg" className="h-auto w-full" />
+              <img
+                src='/main-screen.svg'
+                className='h-auto w-full'
+                alt='Branch screen'
+              />
             </motion.div>
             <motion.span
-              className="mt-3 block text-2xl text-white"
+              className='mt-3 block text-lg md:text-2xl text-white'
               style={{ opacity: newBranchOpacity }}
             >
-              <FaCodeBranch className="mr-3 inline-block h-12 w-12" /> Orel
-              Chalfon's branch
+              <FaCodeBranch className='mr-2 md:mr-3 inline-block h-8 w-8 md:h-12 md:w-12' />{" "}
+              Orel Chalfon's branch
             </motion.span>
           </motion.div>
 
           <motion.p
-            className="translate-y-centered-offset absolute top-1/2 left-[calc(50%-60rem)] w-[50rem] pl-16 text-2xl leading-tight text-white"
+            className='translate-y-centered-offset absolute top-1/2 left-4 md:left-[calc(50%-60rem)] w-[280px] md:w-[50rem] px-4 md:pl-16 text-xl md:text-2xl leading-tight text-white'
             style={stylesWithCssVar({
               opacity: endTextOpacity,
               "--y": endTexty,
             })}
           >
-            <span className="text-primary">Built for flow</span>
+            <span className='text-primary'>Built for flow</span>
             <br />
             Spin up a new branch for any sized project in seconds.
           </motion.p>
@@ -218,11 +250,11 @@ export const Branches = () => {
             "--y": paragraph1TranslateY,
             position,
           })}
-          className="translate-y-centered-offset top-1/2 left-[20px] w-[300px] pl-16 text-2xl leading-tight text-white"
+          className='translate-y-centered-offset top-1/2 left-4 md:left-[20px] w-[250px] md:w-[300px] px-4 md:pl-16 text-xl md:text-2xl leading-tight text-white'
         >
           Not only share code,
           <br />
-          <span className="text-primary">share the context.</span>
+          <span className='text-primary'>share the context.</span>
         </motion.p>
         <motion.p
           style={stylesWithCssVar({
@@ -230,11 +262,11 @@ export const Branches = () => {
             "--y": paragraph2TranslateY,
             position,
           })}
-          className="translate-y-centered-offset top-1/2 right-[20px] w-[300px] pr-16 text-xl leading-tight text-white"
+          className='translate-y-centered-offset top-1/2 right-4 md:right-[20px] w-[250px] md:w-[300px] px-4 md:pr-16 text-lg md:text-xl leading-tight text-white'
         >
           Sometimes it's not about code.
           <br />
-          <span className="text-primary">
+          <span className='text-primary'>
             Get everybody on the same page. Literally.
           </span>
         </motion.p>
@@ -242,3 +274,5 @@ export const Branches = () => {
     </section>
   );
 };
+
+export default Branches;

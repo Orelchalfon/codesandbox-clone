@@ -20,7 +20,10 @@
 
     /* Scrollbar track (background) */
     ::-webkit-scrollbar-track {
-      background:radial-gradient(var(--color-secondary) 50%,var(--color-background) 90%); /* Background color */
+      background: radial-gradient(
+        var(--color-secondary) 50%,
+        var(--color-background) 90%
+      ); /* Background color */
     }
 
     /* Scrollbar thumb (draggable part) */
