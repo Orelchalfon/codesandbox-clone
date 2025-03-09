@@ -38,6 +38,10 @@
     }
   }
 }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-background);
+}
 
 @layer utilities {
   /* This two helpers apply a -50% to the translate x/y, and add

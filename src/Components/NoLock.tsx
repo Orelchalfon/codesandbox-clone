@@ -17,13 +17,10 @@ const NoLock = () => (
         target='_blank'
         rel='noopener nofollow noreferrer'
       >
-        Frontend.FYI
+        Orel Chalfon
       </a>{" "}
       for more videos, and definitely head over to{" "}
-      <a
-        href='https://codesandbox-clone.netlify.app'
-        rel='noopener nofollow noreferrer'
-      >
+      <a href='https://codesandbox.io/' rel='noopener nofollow noreferrer'>
         CodeSandbox' website
       </a>{" "}
       as well!
